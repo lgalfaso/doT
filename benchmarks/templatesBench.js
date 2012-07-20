@@ -1,10 +1,11 @@
 (function() {
 	var jslitmus, _, doU, doT,
-		data = { f1: 1, f2: 2, f3: 3},
+		data = { f1: 1, f2: 2, f3: 3, f4: "http://bebedo.com/laura"},
 		snippet = "<h1>Just static text</h1>\
 		<p>Here is a simple {{=it.f1}} </p>\
 		<div>test {{=it.f2}}\
 		<div>{{=it.f3}}</div>\
+		<div>{{!it.f4}}</div>\
 		</div>";
 
 	if (typeof module !== 'undefined' && module.exports) {
@@ -19,7 +20,7 @@
 		// doT with 'it'
 		var doTCompiledParam = doT.template(snippet);
 		// doT with 'this'
-		var doTCompiled = doT.template(snippet.replace(/=it\./g, '=this.'));
+		var doTCompiled = doT.template(snippet.replace(/=it\./g, '=this.').replace(/{{!it\./g, '{{!this.'));
 		// doT with 'it' and append = false
 		doT.templateSettings.append = false;
 		var doTCompiledNoAppend = doT.template(snippet);
@@ -66,7 +67,7 @@
 }
 
 	function runTests() {
-		//var sys = require('sys');
+		//var util = require('util');
 		jslitmus = require('./jslitmus.js');
 		doU = require('./templating/doU.js');
 		doT = require('./templating/doT.js');
@@ -75,7 +76,7 @@
 		testsetup(snippet);
 		// Log the test results
 		jslitmus.on('complete', function(test) {
-			//console.log(sys.inspect(process.memoryUsage()));
+			//console.log(util.inspect(process.memoryUsage()));
 			console.log(test.toString());
 		});
 		// 'all_complete' fires when all tests have finished.
